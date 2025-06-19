@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Date, Integer, String, ForeignKey, Time
+from sqlalchemy import Column, Date, Integer, String, ForeignKey, Table, Time
 from sqlalchemy.orm import relationship
 from .db import Base
 
@@ -99,6 +99,7 @@ class Equipo(Base):
     partido_jugador1 = relationship("Partido",back_populates= "jugador1")
     partido_jugador2 = relationship("Partido",back_populates= "jugador2")
     
+torneo_categoria = Table("torneo_categoria",Base.metadata, Column("Categoria", ForeignKey("Categoria.id"), primary_key=True), Column("Torneo", ForeignKey("Torneo.id"), primary_key=True))
 
 class Categoria(Base):
     __tablename__ = 'Categoria'
@@ -113,28 +114,7 @@ class Categoria(Base):
     jugadores = relationship("Jugador", back_populates="categoria")
     equipos = relationship("Equipo", back_populates="categoria")
     partidos = relationship("Partido", back_populates="categoria")
-    torneo_categoria = relationship("Torneo_Categoria", back_populates="categoria")
-
-    #Mini explicacion que se repite en class fase
-    #Categoria no llama ForeignKeys, puesto que en las realciones 1:N
-    #Solo llama ForeignKeys los que son 'N'
-    #En este caso, categoria es unico para cada cosa a la que se conecta
-    #Por ende no debe usar ForeigKeys
-    #Con torneo tiene relacion N:N, pero es es resuelto por la tabla intermedia
-    #Lo cual lo convierte en una relacion 1:N y luego de la intermedia N:1
-
-class Torneo_Categoria(Base):
-    __tablename__ = "torneo_categoria"
-    #Atributo
-    id = Column(Integer, primary_key=True, index=True)
-
-    #ForeignKeys
-    categoria_id = Column(Integer, ForeignKey('Categoria.id')) #Aca esta lo que comente en class categoria
-    torneo_id = Column(Integer, ForeignKey('Torneo.id'))
-
-    #RelationShips
-    categoria = relationship("Categoria", back_populates="torneo_categoria")
-    torneo = relationship("Torneo", back_populates="torneo_categoria")
+    torneos = relationship("Torneo", secondary=torneo_categoria, backref="Categoria")
 
 class Torneo(Base):
     __tablename__ = "Torneo"
@@ -144,7 +124,7 @@ class Torneo(Base):
     fecha_Inscripcion = Column(Date, nullable=False)
     competencia = Column(String)
     #Relationships
-    torneo_categoria = relationship("Torneo_Categoria",back_populates="torneo")
+    categoria = relationship("Categoria", secondary=torneo_categoria,backref="Torneo")
     mesas = relationship("Mesa", back_populates="Torneo") 
     fases = relationship("Fase", back_populates="Torneo")
 

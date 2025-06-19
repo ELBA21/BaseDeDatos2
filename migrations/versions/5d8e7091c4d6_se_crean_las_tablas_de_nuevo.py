@@ -1,8 +1,8 @@
-"""Se agregan tablas y se corrige error entre partido y Set
+"""Se Crean las tablas de nuevo
 
-Revision ID: 06f8a5ecefcf
+Revision ID: 5d8e7091c4d6
 Revises: 
-Create Date: 2025-06-15 02:24:26.072618
+Create Date: 2025-06-18 20:42:20.028736
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '06f8a5ecefcf'
+revision: str = '5d8e7091c4d6'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -82,15 +82,13 @@ def upgrade() -> None:
     schema='test_schema'
     )
     op.create_table('torneo_categoria',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('categoria_id', sa.Integer(), nullable=True),
-    sa.Column('torneo_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['categoria_id'], ['test_schema.Categoria.id'], ),
-    sa.ForeignKeyConstraint(['torneo_id'], ['test_schema.Torneo.id'], ),
-    sa.PrimaryKeyConstraint('id'),
+    sa.Column('Categoria', sa.Integer(), nullable=False),
+    sa.Column('Torneo', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['Categoria'], ['test_schema.Categoria.id'], ),
+    sa.ForeignKeyConstraint(['Torneo'], ['test_schema.Torneo.id'], ),
+    sa.PrimaryKeyConstraint('Categoria', 'Torneo'),
     schema='test_schema'
     )
-    op.create_index(op.f('ix_test_schema_torneo_categoria_id'), 'torneo_categoria', ['id'], unique=False, schema='test_schema')
     op.create_table('Equipo',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('nombre', sa.String(), nullable=False),
@@ -149,7 +147,6 @@ def downgrade() -> None:
     op.drop_table('Partido', schema='test_schema')
     op.drop_index(op.f('ix_test_schema_Equipo_id'), table_name='Equipo', schema='test_schema')
     op.drop_table('Equipo', schema='test_schema')
-    op.drop_index(op.f('ix_test_schema_torneo_categoria_id'), table_name='torneo_categoria', schema='test_schema')
     op.drop_table('torneo_categoria', schema='test_schema')
     op.drop_table('Mesa', schema='test_schema')
     op.drop_index(op.f('ix_test_schema_Jugador_id'), table_name='Jugador', schema='test_schema')
