@@ -37,7 +37,79 @@ class Asociacion(Base):
     ciudad = Column(String, nullable=False)
     pais = Column(String, nullable=False)
     #RelationShips
-    #jugadores = relationship("Jugador", back_populates="asociacion")
+
+    #asosiacion-jugador
+    jugadores = relationship("Jugador", back_populates="asociacion")
+
+
+class Partido(Base):
+    __tablename__ = "partido"
+
+    #Atributos
+    id = Column(Integer,primary_key=True, index=True)
+    horario = Column(Time, nullable=False)
+    resultado = Column(String, nullable=False)
+    
+    #ForeignKeys (Se viene pesaito pipipipi)
+    #Por convencion le agrego "_id" a las fKeys (nueva abreviacion para las ForeignKeys a partir de ahora) (no se volvio a usar)
+    equipo1_id = Column(Integer, ForeignKey('equipo.id'))
+    equipo2_id = Column(Integer, ForeignKey('equipo.id'))
+    jugador1_id = Column(Integer, ForeignKey('jugador.id'))
+    jugador2_id = Column(Integer,ForeignKey('jugador.id'))
+    categoria_id = Column(Integer, ForeignKey('categoria.id'))
+    mesa_id = Column(Integer, ForeignKey('mesa.id'))
+    fase_id = Column(Integer, ForeignKey('fase.id'))
+        #No fue tan pesao lol
+    #btw pardio es el N, en la mayor parte de las relacione
+    #Acabo de caer en cuenta que cuando nuro lea esto va a interpretar N de otra forma
+
+    #Relationships
+
+    #equipo-partido
+    equipo1 = relationship("Equipo", back_populates="partido_equipo1", foreign_keys=[equipo1_id])
+    equipo2 = relationship("Equipo", back_populates="partido_equipo2",foreign_keys=[equipo2_id])
+    #
+    ##partido-jugador
+    jugador1 = relationship("Jugador", back_populates="partido_jugador1", foreign_keys=[jugador1_id])
+    jugador2 = relationship("Jugador", back_populates="partido_jugador2",foreign_keys=jugador2_id)
+#
+    #categoria-partido
+    categoria = relationship("Categoria",back_populates="partidos")
+#
+    ##mesa-partido
+    mesa = relationship("Mesa", back_populates="partidos")
+#
+    ##fase-partido
+    fase= relationship("Fase", back_populates="partidos") 
+#
+    #sets-partido
+    sets = relationship("Set", back_populates="partido")
+
+class Equipo(Base):
+    __tablename__ = 'equipo'
+    #Atributos
+    id = Column(Integer, primary_key=True, index=True)
+    nombre = Column(String, nullable=False)
+    
+    #ForeignKeys
+    jugador_id = Column(Integer, ForeignKey('jugador.id'))
+    jugador2_id = Column(Integer, ForeignKey('jugador.id'))
+    categoria_id = Column(Integer, ForeignKey('categoria.id'))
+
+    #RelationShips
+
+    #jugador-equipo
+    jugador1 = relationship("Jugador",back_populates="equipos_jugador1",foreign_keys=[jugador_id])
+    jugador2 = relationship("Jugador", back_populates="equipos_jugador2", foreign_keys=[jugador2_id])
+
+    #categoria-equipo
+    categoria = relationship("Categoria", back_populates="equipos")
+
+    #partido-equipo
+    partido_equipo1 = relationship("Partido", back_populates="equipo1", foreign_keys=[Partido.equipo1_id])
+    partido_equipo2 = relationship("Partido", back_populates="equipo2", foreign_keys=[Partido.equipo2_id])
+
+
 
 class Jugador(Base):
     __tablename__ = 'jugador'
@@ -53,51 +125,27 @@ class Jugador(Base):
     #ForegKeys - Esta seccion se declaran las columnas de la tabla RELACIONADA a otras tablas
     #Esto crearia las columnas de las claves foraneas
     asociacion_id = Column(Integer, ForeignKey('asociacion.id')) # <-- Se pueden usar comillas simples o dobles aparemente
-    ategoria_id = Column(Integer, ForeignKey('categoria.id'))
+    categoria_id = Column(Integer, ForeignKey('categoria.id'))
     #Notar que la estructura es practicamente la misma, solo que se agrega el nombre de la tabla + '.id' dentro del argumento del Foreignkey
 
     #Relationships
     #Los 'relationship' ayudan a conectar las tablas en python
-    #asociacion = relationship("Asociacion", back_populates="jugadores")
-    #categoria = relationship("Categoria", back_populates="jugadores")
 
-    #Para entenderlos prestar especial atencion a estos 2, principalmente al nombre y a lo que esta igualado en back_populates
-    #equipos_jugador1 = relationship("Equipo", back_populates="jugador1")
-    #equipos_jugador2 = relationship("Equipo", back_populates="jugador2")
-    # equipo_jugador1, es un nombre que sera llamado luego en Equipo
-    #en realtionship("Equipo") se refiere a que esta llamando algo de la CLASE "Equipo", no tiene nada que ver con tablename, solo el nombre de la clase
-    # back_populates esta llamando al simil de equipo_jugador1, pero de la CLASE Equipo, porfavor seguir la explicacion en clase Equipo
-
-
-class Equipo(Base):
-    __tablename__ = 'equipo'
-    #Atributos
-    id = Column(Integer, primary_key=True, index=True)
-    nombre = Column(String, nullable=False)
+    #asociacion-jugador
+    asociacion = relationship("Asociacion", back_populates="jugadores")
     
-    #ForeignKeys
-    jugador_id = Column(Integer, ForeignKey('jugador.id'))
-    jugador2_id = Column(Integer, ForeignKey('jugador.id'))
-    categoria_id = Column(Integer, ForeignKey('categoria.id'))
+    #Relationship categoria-jugador
+    categoria = relationship("Categoria", back_populates="jugadores")
 
-    #RelationShips
+    #Relationship equipo-jugador
+    equipos_jugador1 = relationship("Equipo",back_populates="jugador1",foreign_keys=[Equipo.jugador_id])
+    equipos_jugador2 = relationship("Equipo",back_populates="jugador2",foreign_keys=[Equipo.jugador2_id])
 
-    #Siguiendo con la explicacion anterior
-    #Noten como jugador1, es exactamente lo mismo que se encontraba en la linea
-    #       equipos_jugador1 = relationship("Equipo", back_populates="jugador1")
-    #jugador1 fue llamado en back_populates="jugador1" hasta aca
+    #partido-jugador
+    partido_jugador1 =  relationship("Partido", back_populates="jugador1", foreign_keys=[Partido.jugador1_id])
+    partido_jugador2 =  relationship("Partido", back_populates="jugador2", foreign_keys=[Partido.jugador2_id])
 
-    #Siento que me puse cargante con la explicacion asi que cualquier wea me preguntan en la u o por wsp
-    #Ojala ya les haya quedado claro
-    #jugador1 = relationship("Jugador",back_populates="equipos_jugador1")
-    #jugador2 = relationship("Jugador", back_populates="equipos_jugador2")
-#
-#
-    #categoria = relationship("Categoria", back_populates="equipos")
-    #partido_equipo1 = relationship("Partido", back_populates="equipo1")
-    #partido_equipo2 = relationship("Partido", back_populates="equipo2")
-    #partido_jugador1 = relationship("Partido",back_populates= "jugador1")
-    #partido_jugador2 = relationship("Partido",back_populates= "jugador2")
+
     
 torneo_categoria = Table("torneo_categoria",Base.metadata, Column("categoria", ForeignKey("categoria.id"), primary_key=True), Column("torneo", ForeignKey("torneo.id"), primary_key=True))
 
@@ -110,11 +158,20 @@ class Categoria(Base):
     genero = Column(String, nullable=False)
     set_por_partido = Column(Integer)
     puntos_por_set = Column(Integer)
+
+
     #Relationships
-    #jugadores = relationship("Jugador", back_populates="categoria")
-    #equipos = relationship("Equipo", back_populates="categoria")
-    #partidos = relationship("Partido", back_populates="categoria")
-    #torneos = relationship("Torneo", secondary=torneo_categoria, backref="Categoria")
+    #jugador-categoria
+    jugadores = relationship("Jugador", back_populates="categoria")
+
+    #equipo-categoria
+    equipos = relationship("Equipo", back_populates="categoria")
+
+    #partido-categoria
+    partidos = relationship("Partido", back_populates="categoria")
+
+    #torneo-categoria
+    torneos = relationship("Torneo", secondary=torneo_categoria, backref="categoria")
 
 class Torneo(Base):
     __tablename__ = "torneo"
@@ -125,9 +182,14 @@ class Torneo(Base):
     competencia = Column(String)
 
     #Relationships
-    #categoria = relationship("Categoria", secondary=torneo_categoria,backref="Torneo")
-    #mesas = relationship("Mesa", back_populates="Torneo") 
-    #fases = relationship("Fase", back_populates="Torneo")
+    #categoria-torneos
+    #Se uso backref del lado contrario.
+
+    #mesa-torneo
+    mesas = relationship("Mesa", back_populates="torneo") 
+
+    #fase-torneo
+    fases = relationship("Fase", back_populates="torneo")
 
 class Fase(Base):
     __tablename__ = "fase"
@@ -142,9 +204,14 @@ class Fase(Base):
 
 
     #Por otro lado Fase en realcion a Partido es el 1, entonces solo llamamos el relationship()
-    #partidos = relationship("Partido", back_populates="Fase")
     ##Aun asi la foreignKey debe ser llamada como relationship
-    #Torneo =  relationship("Torneo", back_populates="fases")
+
+    #Relationship
+    #partido-fase
+    partidos = relationship("Partido", back_populates="fase")
+
+    #torneo-fase
+    torneo =  relationship("Torneo", back_populates="fases")
 
 class Mesa(Base):
     __tablename__ = "mesa"
@@ -156,39 +223,15 @@ class Mesa(Base):
     Torneo_id = Column(Integer, ForeignKey('torneo.id'))
 
     #RelationShips
-    #Torneo = relationship("Torneo", back_populates="mesas")
-    #partidos = relationship("Partido", back_populates="Mesa")
+    #torneo-mesa
+    torneo = relationship("Torneo", back_populates="mesas")
+
+    #mesa-partido
+    partidos = relationship("Partido", back_populates="mesa")
+
 #Sinceramente no se que hace Base, estaba en la plantilla, debo preguntar eso
-class Partido(Base):
-    __tablename__ = "partido"
+# Respuesta: Base hace referencia a la conexion a la base de datos (plantilla del profe)
 
-    #Atributos
-    id = Column(Integer,primary_key=True, index=True)
-    horario = Column(Time, nullable=False)
-    resultado = Column(String, nullable=False)
-    
-    #ForeignKeys (Se viene pesaito pipipipi)
-    #Por convencion le agrego "_id" a las fKeys (nueva abreviacion para las ForeignKeys a partir de ahora)
-    equipo1_id = Column(Integer, ForeignKey('equipo.id'))
-    equipo2_id = Column(Integer, ForeignKey('equipo.id'))
-    jugador1_id = Column(Integer, ForeignKey('jugador.id'))
-    jugador2_id = Column(Integer,ForeignKey('jugador.id'))
-    categoria_id = Column(Integer, ForeignKey('categoria.id'))
-    mesa_id = Column(Integer, ForeignKey('mesa.id'))
-    fase_id = Column(Integer, ForeignKey('fase.id'))
-        #No fue tan pesao lol
-    #btw pardio es el N, en la mayor parte de las relacione
-    #Acabo de caer en cuenta que cuando nuro lea esto va a interpretar N de otra forma
-
-    #Relationships
-    #equipo1 = relationship("Equipo", back_populates="partido_equipo1")
-    #equipo2 = relationship("Equipo", back_populates="partido_equipo2")
-    #Jugador1 = relationship("Jugador", back_populates="partido_jugador1")
-    #Jugador2 = relationship("Jugador", back_populates="partido_jugador2")
-    #mesa = relationship("Mesa", back_populates="partidos")
-    #fase= relationship("Fase", back_populates="partidos") 
-    #sets = relationship("Set", back_populates="partido")
-    #Chat-gpt me dijo que esto generapa problemas con las migraciones por eso lo deje comentado
 
 class Set(Base):
     __tablename__ = "set"
@@ -198,7 +241,10 @@ class Set(Base):
     numero_Set = Column(Integer, nullable= False)
     puntos_Jugador1 = Column(Integer, nullable=False)
     puntos_Jugador2 = Column(Integer, nullable=False)
+
     #ForeignKey
     partido_id = Column(Integer, ForeignKey("partido.id"))
 
-    #partido = relationship("Partido", back_populates="sets")
+    #relationship
+    #sets-partido
+    partido = relationship("Partido", back_populates="sets")
