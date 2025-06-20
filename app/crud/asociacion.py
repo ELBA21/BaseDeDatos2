@@ -8,20 +8,27 @@ def create_asociacion(session: Session, nombre: str, ciudad: str, pais: str):
     session.commit()
     return asociacion
 
-def get_asociacion_all(session: Session):
-    return session.query(Asociacion).all()
+def get_asociacion_id(session: Session, asociacion_id: int):
+    asociacion = session.get(Asociacion, asociacion_id)
+    return asociacion
 
-def update_asociacion_all(session: Session, asociacion_id: int, nombre: Optional[str] = None, ciudad: Optional[str] = None, pais: Optional[str] = None):
+def update_asociacion_id(session: Session, asociacion_id: int, nombre: Optional[str] = None, ciudad: Optional[str] = None, pais: Optional[str] = None):
     asociacion = session.get(Asociacion, asociacion_id)
     if not asociacion:
         print("NO ENCONTRADO")
         return None
     if nombre is not None:
         asociacion.nombre = nombre
+    else:
+        print("No se insserto nombre")
     if ciudad is not None:
         asociacion.ciudad = ciudad
+    else:
+        print("No se ha insertado ciudad")
     if pais is not None:
         asociacion.pais = pais
+    else:
+        print("No se ha insertado pais")
     session.commit()
     return asociacion
 
@@ -33,4 +40,5 @@ def delete_asociacion(session: Session, asociacion_id: int):
     session.delete(asociacion)
     session.commit()
     return asociacion    
+    
 
