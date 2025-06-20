@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 
 from .app.router import asociacion
-
+from .app.router import partido
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
@@ -40,3 +40,4 @@ app.add_middleware(CORSMiddleware, **MIDDLEWARE_CONFIG)
 
 # Routers
 app.include_router(asociacion.router, prefix="/asociacion", tags=["asociacion"])
+app.include_router(partido.router, prefix="/partido", tags=["partido"])

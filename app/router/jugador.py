@@ -6,7 +6,7 @@ router = APIRouter()
 
 
 
-@router.get("/")
-def get_jugadores_all_endpoint(session: Session = Depends(get_db)):
-    jugadores = get_jugador_all(session)
-    return [{"id": jugador.id } for jugador in jugadores]
+#@router.get("/")
+#def get_jugadores_all_endpoint(session: Session = Depends(get_db)):
+#    jugadores = get_jugador_all(session)
+#    return [{"id": jugador.id } for jugador in jugadores]
