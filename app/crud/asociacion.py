@@ -1,6 +1,6 @@
 from typing import Optional
 from sqlalchemy.orm import Session
-from ..models import Jugador, Asociacion,Categoria
+from ..models import Asociacion
 
 def create_asociacion(session: Session, nombre: str, ciudad: str, pais: str):
     asociacion = Asociacion(nombre=nombre, ciudad=ciudad, pais=pais)

@@ -21,7 +21,7 @@ def update_asociacion_id_endpoint(asociacion_id:int, nombre:Optional[str]=None, 
     asociacion = update_asociacion_id(session,asociacion_id,nombre, ciudad,pais)
     return {"id": asociacion_id, "nombre": asociacion.nombre, "ciudad": asociacion.ciudad, "pais": asociacion.pais}
 
-@router.delete("/asociacion_id")
+@router.delete("/{asociacion_id}")
 def delete_asociacion_endpoint(asociacion_id:int, session: Session = Depends(get_db)):
     asociacion = delete_asociacion(session, asociacion_id)
     if not asociacion:
