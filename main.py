@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 
-from .app.router import asociacion,partido, el_set, torneo,mesa,fase,categoria,jugador,equipo
+from .app.router import asociacion,partido, el_set, torneo,mesa,fase,categoria,jugador,equipo,partido
 
 
 @asynccontextmanager
