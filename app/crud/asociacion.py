@@ -9,7 +9,13 @@ def create_asociacion(session: Session, nombre: str, ciudad: str, pais: str):
     return asociacion
 
 def get_asociacion_id(session: Session, asociacion_id: int):
+    if not asociacion_id:
+        print("ID no proporcionado")
+        return None
     asociacion = session.get(Asociacion, asociacion_id)
+    if not asociacion:
+        print("Asociacion no encontrada")
+        return None
     return asociacion
 
 def update_asociacion_id(session: Session, asociacion_id: int, nombre: Optional[str] = None, ciudad: Optional[str] = None, pais: Optional[str] = None):

@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 
-from .app.router import asociacion,partido, el_set, torneo
+from .app.router import asociacion,partido, el_set, torneo,mesa
 
 
 @asynccontextmanager
@@ -43,3 +43,4 @@ app.include_router(asociacion.router, prefix="/asociacion", tags=["asociacion"])
 app.include_router(partido.router, prefix="/partido", tags=["partido"])
 app.include_router(el_set.router,prefix="/Set",tags=["Set"])
 app.include_router(torneo.router,prefix="/Torneo", tags=["torneo"])
+app.include_router(mesa.router, prefix="/Mesa", tags=["mesa"])
