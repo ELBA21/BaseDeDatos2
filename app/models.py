@@ -2,6 +2,8 @@ from sqlalchemy import Column, Date, DateTime, Integer, String, ForeignKey, Tabl
 from sqlalchemy.orm import relationship
 from .db import Base
 
+#Comentario de prueba de mi rama local
+
 #Cada tabla tiene una estructura algo asi
 #class Nombre_Tabla_A(Base):
 #   __tablename_ = "Tabla_A" (Puede ser comillas normales o dobles)
