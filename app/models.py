@@ -149,7 +149,7 @@ class Jugador(Base):
 
 
     
-torneo_categoria = Table("torneo_categoria",Base.metadata, Column("categoria", ForeignKey("categoria.id"), primary_key=True), Column("torneo", ForeignKey("torneo.id"), primary_key=True))
+#torneo_categoria = Table("torneo_categoria",Base.metadata, Column("categoria", ForeignKey("categoria.id"), primary_key=True), Column("torneo", ForeignKey("torneo.id"), primary_key=True))
 
 class Categoria(Base):
     __tablename__ = 'categoria'
@@ -173,7 +173,19 @@ class Categoria(Base):
     partidos = relationship("Partido", back_populates="categoria")
 
     #torneo-categoria
-    torneos = relationship("Torneo", secondary=torneo_categoria, backref="categoria")
+    #torneos = relationship("Torneo", secondary=torneo_categoria, backref="categoria")
+    torneo_categorias = relationship("TorneoCategoria", back_populates="categoria")
+
+class TorneoCategoria(Base): #ELANDRE VVVVVVV
+    __tablename__ = 'torneo_categoria'
+
+    #Atributos
+    torneo_id = Column(Integer, ForeignKey('torneo.id'), primary_key=True)
+    categoria_id = Column(Integer, ForeignKey('categoria.id'), primary_key=True)
+
+    #Relationships
+    torneo = relationship("Torneo", back_populates="torneo_categorias")
+    categoria = relationship("Categoria", back_populates="torneo_categorias")
 
 class Torneo(Base):
     __tablename__ = "torneo"
@@ -192,6 +204,8 @@ class Torneo(Base):
 
     #fase-torneo
     fases = relationship("Fase", back_populates="torneo")
+
+    torneo_categorias = relationship("TorneoCategoria", back_populates="torneo") #ELANDRE
 
 class Fase(Base):
     __tablename__ = "fase"
