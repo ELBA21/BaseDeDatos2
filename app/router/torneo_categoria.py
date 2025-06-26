@@ -8,5 +8,7 @@ router = APIRouter()
 
 @router.post("/")
 def create_torneo_categoria_endpoint(torneo_id: int, categoria_id: int, session: Session = Depends(get_db)):
+    if(categoria_id<1):
+        raise HTTPException(status_code=400, detail="Necesito un entero positivo, amermelao")
     torneo_categoria = create_torneo_categoria(session, torneo_id, categoria_id)
     return {"torneo_id": torneo_categoria.torneo_id, "categoria_id": torneo_categoria.categoria_id}
