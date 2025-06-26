@@ -1,6 +1,6 @@
 from fastapi  import APIRouter, Depends, HTTPException
 from ..db import get_db
-from ..crud.asociacion import create_torneo_categoria
+from ..crud.torneo_categoria import create_torneo_categoria
 from sqlalchemy.orm import Session
 from typing import Optional
 router = APIRouter()
