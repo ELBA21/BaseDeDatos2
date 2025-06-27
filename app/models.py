@@ -115,6 +115,9 @@ class Equipo(Base):
     partido_equipo2 = relationship("Partido", back_populates="equipo2", foreign_keys=[Partido.equipo2_id])
     partido_equipo_ganador = relationship("Partido", back_populates="equipo_ganador", foreign_keys=[Partido.equipo_ganador_id])
 
+    #inscripcion-equipo
+    inscripciones = relationship("Inscripcion", back_populates="equipo")
+
 
 
 class Jugador(Base):
@@ -152,6 +155,23 @@ class Jugador(Base):
     partido_jugador2 =  relationship("Partido", back_populates="jugador2", foreign_keys=[Partido.jugador2_id])
     partido_jugador_ganador = relationship("Partido", back_populates="jugador_ganador", foreign_keys=[Partido.jugador_ganador_id])
 
+    #inscripcion-jugador
+    inscripciones =  relationship("Inscripcion", back_populates="jugador")
+
+class Inscripcion(Base):
+    __tablename__ = 'inscripcion'
+    #Atributos
+    id = Column(Integer, primary_key=True, index=True)
+
+    #Foreign Keys
+    jugador_id = Column(Integer, ForeignKey('jugador.id'), nullable=True)
+    equipo_id = Column(Integer, ForeignKey('equipo.id'), nullable=True)
+    torneo_categoria_id = Column(Integer, ForeignKey('torneo_categoria.id'))
+
+    #Relaciones
+    jugador =  relationship("Jugador", back_populates="inscripciones")
+    equipo = relationship("Equipo", back_populates="inscripciones")
+    torneo_categoria = relationship("TorneoCategoria", back_populates="inscripciones") 
 
     
 #torneo_categoria = Table("torneo_categoria",Base.metadata, Column("categoria", ForeignKey("categoria.id"), primary_key=True), Column("torneo", ForeignKey("torneo.id"), primary_key=True))
@@ -185,12 +205,16 @@ class TorneoCategoria(Base): #ELANDRE VVVVVVV
     __tablename__ = 'torneo_categoria'
 
     #Atributos
-    torneo_id = Column(Integer, ForeignKey('torneo.id'), primary_key=True)
-    categoria_id = Column(Integer, ForeignKey('categoria.id'), primary_key=True)
+    id = Column(Integer, primary_key=True, index=True)
+    
+    torneo_id = Column(Integer, ForeignKey('torneo.id'))
+    categoria_id = Column(Integer, ForeignKey('categoria.id'))
 
     #Relationships
     torneo = relationship("Torneo", back_populates="torneo_categorias")
     categoria = relationship("Categoria", back_populates="torneo_categorias")
+    
+    inscripciones = relationship("Inscripcion", back_populates="torneo_categoria")
 
 class Torneo(Base):
     __tablename__ = "torneo"
