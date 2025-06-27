@@ -50,14 +50,15 @@ class Partido(Base):
     #Atributos
     id = Column(Integer,primary_key=True, index=True)
     horario = Column(Time, nullable=False)
-    resultado = Column(String, nullable=False)
     
     #ForeignKeys (Se viene pesaito pipipipi)
     #Por convencion le agrego "_id" a las fKeys (nueva abreviacion para las ForeignKeys a partir de ahora) (no se volvio a usar)
     equipo1_id = Column(Integer, ForeignKey('equipo.id'))
     equipo2_id = Column(Integer, ForeignKey('equipo.id'))
+    equipo_ganador_id = Column(Integer, ForeignKey('equipo.id'))
     jugador1_id = Column(Integer, ForeignKey('jugador.id'))
     jugador2_id = Column(Integer,ForeignKey('jugador.id'))
+    jugador_ganador_id = Column(Integer,ForeignKey('jugador.id'))
     categoria_id = Column(Integer, ForeignKey('categoria.id'))
     mesa_id = Column(Integer, ForeignKey('mesa.id'))
     fase_id = Column(Integer, ForeignKey('fase.id'))
@@ -70,10 +71,12 @@ class Partido(Base):
     #equipo-partido
     equipo1 = relationship("Equipo", back_populates="partido_equipo1", foreign_keys=[equipo1_id])
     equipo2 = relationship("Equipo", back_populates="partido_equipo2",foreign_keys=[equipo2_id])
+    equipo_ganador = relationship("Equipo", back_populates="partido_equipo_ganador", foreign_keys=[equipo_ganador_id])
     #
     ##partido-jugador
     jugador1 = relationship("Jugador", back_populates="partido_jugador1", foreign_keys=[jugador1_id])
-    jugador2 = relationship("Jugador", back_populates="partido_jugador2",foreign_keys=jugador2_id)
+    jugador2 = relationship("Jugador", back_populates="partido_jugador2",foreign_keys=[jugador2_id])
+    jugador_ganador = relationship("Jugador", back_populates="partido_jugador_ganador",foreign_keys=[jugador_ganador_id])
 #
     #categoria-partido
     categoria = relationship("Categoria",back_populates="partidos")
@@ -110,6 +113,7 @@ class Equipo(Base):
     #partido-equipo
     partido_equipo1 = relationship("Partido", back_populates="equipo1", foreign_keys=[Partido.equipo1_id])
     partido_equipo2 = relationship("Partido", back_populates="equipo2", foreign_keys=[Partido.equipo2_id])
+    partido_equipo_ganador = relationship("Partido", back_populates="equipo_ganador", foreign_keys=[Partido.equipo_ganador_id])
 
 
 
@@ -146,6 +150,7 @@ class Jugador(Base):
     #partido-jugador
     partido_jugador1 =  relationship("Partido", back_populates="jugador1", foreign_keys=[Partido.jugador1_id])
     partido_jugador2 =  relationship("Partido", back_populates="jugador2", foreign_keys=[Partido.jugador2_id])
+    partido_jugador_ganador = relationship("Partido", back_populates="jugador_ganador", foreign_keys=[Partido.jugador_ganador_id])
 
 
     
