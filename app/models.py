@@ -184,9 +184,11 @@ class Categoria(Base):
 class TorneoCategoria(Base): #ELANDRE VVVVVVV
     __tablename__ = 'torneo_categoria'
 
+    id = Column(Integer, primary_key=True, index=True)
+
     #Atributos
-    torneo_id = Column(Integer, ForeignKey('torneo.id'), primary_key=True)
-    categoria_id = Column(Integer, ForeignKey('categoria.id'), primary_key=True)
+    torneo_id = Column(Integer, ForeignKey('torneo.id'))
+    categoria_id = Column(Integer, ForeignKey('categoria.id'))
 
     #Relationships
     torneo = relationship("Torneo", back_populates="torneo_categorias")
