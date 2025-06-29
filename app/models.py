@@ -216,6 +216,8 @@ class TorneoCategoria(Base): #ELANDRE VVVVVVV
     
     inscripciones = relationship("Inscripcion", back_populates="torneo_categoria")
 
+    fases = relationship("Fase", back_populates="torneo_categoria")
+
 class Torneo(Base):
     __tablename__ = "torneo"
     #Atributos
@@ -231,9 +233,6 @@ class Torneo(Base):
     #mesa-torneo
     mesas = relationship("Mesa", back_populates="torneo") 
 
-    #fase-torneo
-    fases = relationship("Fase", back_populates="torneo")
-
     torneo_categorias = relationship("TorneoCategoria", back_populates="torneo") #ELANDRE
 
 class Fase(Base):
@@ -245,8 +244,7 @@ class Fase(Base):
     #Como Fase Torneo tiene una relacion 1:N (Varias Fases - Un Torneo)
     #Fases debe llamar a la ForeignKey de Torneo
     #Llamamos un entero porque es un puto id obviamente es un entero
-    Torneo_id = Column(Integer, ForeignKey('torneo.id'))
-
+    torneo_categoria_id = Column(Integer, ForeignKey('torneo_categoria.id'))
 
     #Por otro lado Fase en realcion a Partido es el 1, entonces solo llamamos el relationship()
     ##Aun asi la foreignKey debe ser llamada como relationship
@@ -255,8 +253,8 @@ class Fase(Base):
     #partido-fase
     partidos = relationship("Partido", back_populates="fase")
 
-    #torneo-fase
-    torneo =  relationship("Torneo", back_populates="fases")
+    #torneo_categoria-fase
+    torneo_categoria = relationship("TorneoCategoria", back_populates="fases")
 
 class Mesa(Base):
     __tablename__ = "mesa"
