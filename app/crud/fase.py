@@ -18,7 +18,7 @@ def get_fase_id(session: Session, fase_id: int):
         raise ValueError("Fase no encontrada.")
     return fase
 
-def update_fase_id(session: Session, fase_id: int, tipo: Optional[str] = None, torneo_categoria_id: Optional[int] = None):
+def update_fase(session: Session, fase_id: int, tipo: Optional[str] = None, torneo_categoria_id: Optional[int] = None):
     fase = session.get(Fase, fase_id)
     if not fase:
         raise ValueError("Fase no encontrada.")
