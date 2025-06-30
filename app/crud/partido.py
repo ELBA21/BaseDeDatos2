@@ -8,20 +8,25 @@ from ..models import Partido
 def create_partido(
     session: Session,
     horario: time,
+    categoria_id: int,
+    mesa_id: int,
+    fase_id: int,
     equipo1_id: Optional[int] = None,
     equipo2_id: Optional[int] = None,
     equipo_ganador_id: Optional[int] = None,
     jugador1_id: Optional[int] = None,
     jugador2_id: Optional[int] = None,
     jugador_ganador_id: Optional[int] = None,
-    categoria_id: int,
-    mesa_id: int,
-    fase_id: int,
 ):
-    
-    if(equipo1_id is not None and equipo2_id is not None and jugador1_id is None and jugador2_id is None): #if qliao de yandere dev
+
+    if (
+        equipo1_id is not None
+        and equipo2_id is not None
+        and jugador1_id is None
+        and jugador2_id is None
+    ):  # if qliao de yandere dev
         partido = Partido(
-            horario=horario, 
+            horario=horario,
             equipo1_id=equipo1_id,
             equipo2_id=equipo2_id,
             equipo_ganador_id=equipo_ganador_id,
@@ -32,12 +37,17 @@ def create_partido(
             mesa_id=mesa_id,
             fase_id=fase_id,
         )
-        #session.add(partido)
-        #session.commit()
-        #return partido
-    elif(jugador1_id is not None and jugador2_id is not None and equipo1_id is None and equipo2_id is None):
-         partido = Partido(
-            horario=horario, 
+        # session.add(partido)
+        # session.commit()
+        # return partido
+    elif (
+        jugador1_id is not None
+        and jugador2_id is not None
+        and equipo1_id is None
+        and equipo2_id is None
+    ):
+        partido = Partido(
+            horario=horario,
             equipo1_id=None,
             equipo2_id=None,
             equipo_ganador_id=equipo_ganador_id,
@@ -48,17 +58,14 @@ def create_partido(
             mesa_id=mesa_id,
             fase_id=fase_id,
         )
-        #session.add(partido)
-        #session.commit()
-        #return partido
+    # session.add(partido)
+    # session.commit()
+    # return partido
     else:
         raise ValueError("No se admiten jugadores y equipos en el mismo partido")
     session.add(partido)
     session.commit()
     return partido
-
-    
-
 
 
 def get_partido_id(session: Session, partido_id: int):
@@ -116,4 +123,3 @@ def delete_partido(session: Session, partido_id: int):
     session.delete(partido)
     session.commit()
     return partido
-
