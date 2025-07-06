@@ -2,11 +2,13 @@ from typing import Optional
 from sqlalchemy.orm import Session
 from ..models import Asociacion
 
-def create_asociacion(session: Session, nombre: str, ciudad: str, pais: str):
-    asociacion = Asociacion(nombre=nombre, ciudad=ciudad, pais=pais)
+
+def create_asociacion(session: Session, nombre: str, ciudad: int):
+    asociacion = Asociacion(nombre=nombre, ciudad=ciudad)
     session.add(asociacion)
     session.commit()
     return asociacion
+
 
 def get_asociacion_id(session: Session, asociacion_id: int):
     if not asociacion_id:
@@ -18,7 +20,13 @@ def get_asociacion_id(session: Session, asociacion_id: int):
         return None
     return asociacion
 
-def update_asociacion_id(session: Session, asociacion_id: int, nombre: Optional[str] = None, ciudad: Optional[str] = None, pais: Optional[str] = None):
+
+def update_asociacion_id(
+    session: Session,
+    asociacion_id: int,
+    nombre: Optional[str] = None,
+    ciudad: Optional[str] = None,
+):
     asociacion = session.get(Asociacion, asociacion_id)
     if not asociacion:
         print("NO ENCONTRADO")
@@ -31,12 +39,13 @@ def update_asociacion_id(session: Session, asociacion_id: int, nombre: Optional[
         asociacion.ciudad = ciudad
     else:
         print("No se ha insertado ciudad")
-    if pais is not None:
-        asociacion.pais = pais
-    else:
-        print("No se ha insertado pais")
+    # if pais is not None:
+    #    asociacion.pais = pais
+    # else:
+    #    print("No se ha insertado pais")
     session.commit()
     return asociacion
+
 
 def delete_asociacion(session: Session, asociacion_id: int):
     asociacion = session.get(Asociacion, asociacion_id)
@@ -45,6 +54,4 @@ def delete_asociacion(session: Session, asociacion_id: int):
         return None
     session.delete(asociacion)
     session.commit()
-    return asociacion    
-    
-
+    return asociacion

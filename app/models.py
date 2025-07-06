@@ -154,7 +154,7 @@ class Jugador(Base):
     id = Column(Integer, primary_key=True, index=True)
     nombre = Column(String, nullable=False)
     fecha_nacimiento = Column(Date, nullable=False)
-    genero = Column(String, nullable=False)
+    genero = Column(Integer, ForeignKey("genero.id"))
     # pais = Column(String, nullable=False)
     ciudad = Column(Integer, ForeignKey("ciudad.id"))
 
@@ -364,4 +364,3 @@ class Ciudad(
     id = Column(Integer, primary_key=True, index=True, nullable=False)
     nombre = Column(String, nullable=False)
     pais = Column(Integer, ForeignKey("pais.id"))
-

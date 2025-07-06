@@ -1,16 +1,15 @@
 from datetime import date
 from typing import Optional
 from sqlalchemy.orm import Session
-from ..models import Jugador, Asociacion, Categoria
+from ..models import Jugador, Asociacion, Categoria, Genero, Ciudad
 
 
 def create_jugador(
     session: Session,
     nombre: str,
     fecha_nacimiento: date,
-    genero: str,
-    pais: str,
-    ciudad: str,
+    genero: int,
+    ciudad: int,
     categoria_id: int,
     asociacion_id: Optional[int],
 ):
@@ -20,7 +19,6 @@ def create_jugador(
             nombre=nombre,
             fecha_nacimiento=fecha_nacimiento,
             genero=genero,
-            pais=pais,
             ciudad=ciudad,
             asociacion_id=asociacion_id,
             categoria_id=categoria_id,
@@ -42,9 +40,9 @@ def update_jugador_id(
     jugador_id: int,
     nombre: Optional[str] = None,
     fecha_nacimiento: Optional[date] = None,
-    genero: Optional[str] = None,
-    pais: Optional[str] = None,
-    ciudad: Optional[str] = None,
+    genero: Optional[int] = None,
+    # pais: Optional[str] = None,
+    ciudad: Optional[int] = None,
     asociacion_id: Optional[int] = None,
     categoria_id: Optional[int] = None,
 ):
@@ -86,4 +84,3 @@ def delete_jugador(session: Session, jugador_id: int):
     session.delete(jugador)
     session.commit()
     return jugador
-
