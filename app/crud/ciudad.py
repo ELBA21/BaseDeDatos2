@@ -16,7 +16,10 @@ def get_ciudad_id(session: Session, ciudad_id: int):
 
 
 def update_ciudad_id(
-    session: Session, ciudad_id: int, nombre: Optional[str], pais: Optional[int]
+    session: Session,
+    ciudad_id: int,
+    nombre: Optional[str] = None,
+    pais: Optional[int] = None,
 ):
     ciudad = session.get(Ciudad, ciudad_id)
     if not ciudad:

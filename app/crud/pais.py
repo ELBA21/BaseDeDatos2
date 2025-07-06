@@ -14,7 +14,7 @@ def get_pais_id(session: Session, pais_id: int):
     pais = session.get(Pais, pais_id)
 
 
-def update_pais_id(session: Session, pais_id: int, nombre: Optional[str]):
+def update_pais_id(session: Session, pais_id: int, nombre: Optional[str] = None):
     pais = session.get(Pais, pais_id)
     if not pais:
         print("No encontrado")

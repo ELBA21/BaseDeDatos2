@@ -19,7 +19,7 @@ def get_genero_id(session: Session, genero_id: int):
     return genero
 
 
-def update_genero_id(session: Session, genero_id: int, nombre: Optional[str]):
+def update_genero_id(session: Session, genero_id: int, nombre: Optional[str] = None):
     genero = session.get(Genero, genero_id)  # no se poque tenemos una
     # funcion que hace esto arriba y hacemos esto pero yo
     # solo estoy siguiendo como lo hicieron mis amiguis

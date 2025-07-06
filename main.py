@@ -1,11 +1,26 @@
-
 import logging
 
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 
-from .app.router import asociacion,partido, el_set, torneo,mesa,fase,categoria,jugador,equipo,partido, torneo_categoria, inscripcion
+from .app.router import (
+    asociacion,
+    partido,
+    el_set,
+    torneo,
+    mesa,
+    fase,
+    categoria,
+    jugador,
+    equipo,
+    partido,
+    torneo_categoria,
+    inscripcion,
+    genero,
+    ciudad,
+    pais,
+)
 
 
 @asynccontextmanager
@@ -41,12 +56,18 @@ app.add_middleware(CORSMiddleware, **MIDDLEWARE_CONFIG)
 # Routers
 app.include_router(asociacion.router, prefix="/Asociacion", tags=["asociacion"])
 app.include_router(partido.router, prefix="/Partido", tags=["partido"])
-app.include_router(el_set.router,prefix="/Set",tags=["Set"])
-app.include_router(torneo.router,prefix="/Torneo", tags=["torneo"])
+app.include_router(el_set.router, prefix="/Set", tags=["Set"])
+app.include_router(torneo.router, prefix="/Torneo", tags=["torneo"])
 app.include_router(mesa.router, prefix="/Mesa", tags=["mesa"])
 app.include_router(fase.router, prefix="/Fase", tags=["fase"])
 app.include_router(categoria.router, prefix="/Categoria", tags=["categoria"])
 app.include_router(jugador.router, prefix="/Jugador", tags=["jugador"])
 app.include_router(equipo.router, prefix="/Equipo", tags=["equipo"])
-app.include_router(torneo_categoria.router, prefix="/torneo-categoria", tags=["Torneo-Categoría"])
+app.include_router(
+    torneo_categoria.router, prefix="/torneo-categoria", tags=["Torneo-Categoría"]
+)
 app.include_router(inscripcion.router, prefix="/Inscripcion", tags=["inscripcion"])
+app.include_router(genero.router, prefix="/Genero", tags=["genero"])
+app.include_router(pais.router, prefix="/Pais", tags=["pais"])
+app.include_router(ciudad.router, prefix="/Ciudad", tags=["ciudad"])
+

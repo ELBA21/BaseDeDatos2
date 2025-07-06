@@ -64,12 +64,12 @@ def update_jugador_id(
         # pero weno los generos paises y ciudades deberian ser tablas apartes mis amigos programadores y benjamin martinez,
         # se que nadie va a leer esto
         jugador.genero = genero
-    if pais is not None:
-        jugador.pais = pais
+    # if pais is not None:
+    #    jugador.pais = pais
     if ciudad is not None:
         jugador.ciudad = ciudad
-    # if asociacion_id is not None:  # un jugador si puede tener None en categoria
-    jugador.asociacion_id = asociacion_id
+    if asociacion_id is not None:  # un jugador si puede tener None en categoria
+        jugador.asociacion_id = asociacion_id
     if categoria_id is not None:
         jugador.categoria_id = categoria_id
     session.commit()
