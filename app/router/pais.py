@@ -5,7 +5,6 @@ from sqlalchemy.orm import Session, session
 from typing import Optional
 from datetime import date
 
-from app.crud import pais
 
 router = APIRouter()
 
@@ -36,7 +35,7 @@ def get_pais_id_endpoint(
     }
 
 
-@router.put("/(pais_id)")
+@router.put("/{pais_id}")
 def update_pais_id_endpoint(
     pais_id: int,
     nombre: Optional[str] = None,
@@ -44,7 +43,7 @@ def update_pais_id_endpoint(
 ):
     pais = update_pais_id(session, pais_id, nombre)
     if not pais:
-        raise HTTPException(status_code=404, detail="Genero no encontrado")
+        raise HTTPException(status_code=404, detail="Pais no encontrado")
     return {
         "id": pais.id,
         "nombre": pais.nombre,
@@ -55,7 +54,7 @@ def update_pais_id_endpoint(
 def delete_pais_endpoint(pais_id: int, session: Session = Depends(get_db)):
     pais = delete_pais(session, pais_id)
     if not pais:
-        raise HTTPException(status_code=404, detail="Genero no encontrado")
+        raise HTTPException(status_code=404, detail="Pais no encontrado")
     return {
         "id": pais.id,
         "nombre": pais.nombre,

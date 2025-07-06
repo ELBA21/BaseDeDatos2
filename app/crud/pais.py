@@ -12,6 +12,7 @@ def create_pais(session: Session, nombre: str):
 
 def get_pais_id(session: Session, pais_id: int):
     pais = session.get(Pais, pais_id)
+    return pais
 
 
 def update_pais_id(session: Session, pais_id: int, nombre: Optional[str] = None):
@@ -30,7 +31,7 @@ def delete_pais(session: Session, pais_id: int):
     if not pais:
         print("No encontrado")
         return None
-    if pais.nombre is "russia":
+    if pais.nombre == "russia":
         print("https://www.youtube.com/watch?v=4y-ZdQ_4Ddg")
     session.delete(pais)
     session.commit()

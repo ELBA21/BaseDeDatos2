@@ -349,6 +349,8 @@ class Genero(Base):
     __tablename__ = "genero"
     id = Column(Integer, primary_key=True, index=True, nullable=False)
     nombre = Column(String, nullable=False)
+    categoria_id = Column(Integer, ForeignKey("categoria.id"))
+    categoria = relationship("Categoria", back_populates="generos")
 
 
 class Pais(Base):

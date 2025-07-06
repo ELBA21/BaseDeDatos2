@@ -70,4 +70,3 @@ app.include_router(inscripcion.router, prefix="/Inscripcion", tags=["inscripcion
 app.include_router(genero.router, prefix="/Genero", tags=["genero"])
 app.include_router(pais.router, prefix="/Pais", tags=["pais"])
 app.include_router(ciudad.router, prefix="/Ciudad", tags=["ciudad"])
-
