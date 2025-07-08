@@ -228,10 +228,10 @@ class Categoria(Base):
     # genero = Column(Integer, ForeignKey)
     set_por_partido = Column(Integer)
     puntos_por_set = Column(Integer)
-
+    genero = Column(Integer, ForeignKey("genero.id"))
     generos = relationship(
         "Genero", back_populates="categoria"
-    )  # para poder tener partidos mixtos o no la relacion es 1 a n
+    )  # taba mal modelado esto asi q lo cambie
     # Relationships
     # jugador-categoria
     jugadores = relationship("Jugador", back_populates="categoria")
@@ -349,7 +349,7 @@ class Genero(Base):
     __tablename__ = "genero"
     id = Column(Integer, primary_key=True, index=True, nullable=False)
     nombre = Column(String, nullable=False)
-    categoria_id = Column(Integer, ForeignKey("categoria.id"))
+    # categoria_id = Column(Integer, ForeignKey("categoria.id"))
     categoria = relationship("Categoria", back_populates="generos")
 
 

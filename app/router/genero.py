@@ -11,14 +11,12 @@ router = APIRouter()
 @router.post("/")
 def create_genero_endpoint(
     nombre: str,
-    categoria_id: Optional[int] = None,
     session: Session = Depends(get_db),
 ):
-    genero = create_genero(session, nombre, categoria_id)
+    genero = create_genero(session, nombre)
     return {
         "id": genero.id,
         "nombre": genero.nombre,
-        "categoria_id": genero.categora_id,
     }
 
 
@@ -33,7 +31,6 @@ def get_genero_id_endpoint(
     return {
         "id": genero.id,
         "nombre": genero.nombre,
-        "categoria_id": genero.categora_id,
     }
 
 
@@ -41,16 +38,14 @@ def get_genero_id_endpoint(
 def update_genero_id_endpoint(
     genero_id: int,
     nombre: Optional[str] = None,
-    categoria_id: Optional[int] = None,
     session: Session = Depends(get_db),
 ):
-    genero = update_genero_id(session, genero_id, nombre, categoria_id)
+    genero = update_genero_id(session, genero_id, nombre)
     if not genero:
         raise HTTPException(status_code=404, detail="Genero no encontrado")
     return {
         "id": genero.id,
         "nombre": genero.nombre,
-        "categoria_id": genero.categora_id,
     }
 
 
@@ -62,5 +57,4 @@ def delete_genero_endpoint(genero_id: int, session: Session = Depends(get_db)):
     return {
         "id": genero.id,
         "nombre": genero.nombre,
-        "categoria_id": genero.categora_id,
     }

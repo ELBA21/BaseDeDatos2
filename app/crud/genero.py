@@ -4,8 +4,8 @@ from sqlalchemy.orm import Session
 from ..models import Genero
 
 
-def create_genero(session: Session, nombre: str, categoria_id: Optional[int] = None):
-    genero = Genero(nombre=nombre, categoria_id=categoria_id)
+def create_genero(session: Session, nombre: str):
+    genero = Genero(nombre=nombre)
     session.add(genero)
     session.commit()
     return genero
@@ -23,7 +23,7 @@ def update_genero_id(
     session: Session,
     genero_id: int,
     nombre: Optional[str] = None,
-    categoria_id: Optional[int] = None,
+    #  categoria_id: Optional[int] = None,
 ):
     genero = session.get(Genero, genero_id)  # no se poque tenemos una
     # funcion que hace esto arriba y hacemos esto pero yo
@@ -34,8 +34,8 @@ def update_genero_id(
         return None
     if nombre is not None:
         genero.nombre = nombre
-    if categoria_id is not None:
-        genero.categoria_id = categoria_id
+    #   if categoria_id is not None:
+    #       genero.categoria_id = categoria_id
     session.commit()
     return genero
 

@@ -15,7 +15,7 @@ def create_ciudad_endpoint(
     pais: int,
     session: Session = Depends(get_db),
 ):
-    pais = create_ciudad(session, nombre, pais)
+    ciudad = create_ciudad(session, nombre, pais)
     return {
         "id": ciudad.id,
         "nombre": ciudad.nombre,
