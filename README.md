@@ -5,14 +5,14 @@ Este proyecto modela un sistema completo de torneos de tenis de mesa. Incluye fu
 ---
 ## Características principales
 - Registro de jugadores y asociaciones
-- Administración de ciudaes y países
+- Administración de ciudades y países
 - Organización de torneos con múltiples categorías
 - Soporte para inscripciones individuales y por equipo
 - Asignación de mesas, horarios y fases de competición
 - Registro detallado de resultados por set
 - Relaciones claras entre entidades: partidos, jugadores, equipos, fases, etc.
 ---
-## Estrctura de modelos
+## Estructura de modelos
 ### Jugador
 - Atributos: nombre, fecha de nacimiento, género, ciudad, categoría
 - Relaciones: pertenece a una asociación, puede estar en uno o dos equipos, puede jugar múltiples partidos e inscribirse en torneos
