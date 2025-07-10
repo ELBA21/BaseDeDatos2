@@ -1,10 +1,15 @@
-from datetime import date
+from datetime import date, timedelta
 from typing import Optional
 from sqlalchemy.orm import Session
 from ..models import Torneo
 
-def create_torneo(session: Session,nombre:Optional[str],fecha_Inscripcion:Optional[date],competencia:Optional[str]):
-    torneo = Torneo(nombre= nombre,fecha_Inscripcion=fecha_Inscripcion, competencia = competencia)
+def create_torneo(session: Session,nombre:str, fecha_Inscripcion:date, competencia:Optional[str]):
+    hoy = date.today()
+    limite = hoy + timedelta(days=30)
+    if (hoy > fecha_Inscripcion or fecha_Inscripcion > limite):
+        raise ValueError("La fecha de inscripción debe estar dentro de los próximos 30 días.")
+    torneo = Torneo(nombre=nombre, fecha_inscripcion=fecha_Inscripcion, competencia = competencia)
+
     session.add(torneo)
     session.commit()
     return torneo
@@ -12,18 +17,22 @@ def create_torneo(session: Session,nombre:Optional[str],fecha_Inscripcion:Option
 def get_torneo_id(session:Session,torneo_id:int):
     torneo = session.get(Torneo, torneo_id)
     if not torneo:
-        print("No se encontro")
+        raise ValueError("Torneo no encontrado")
     return torneo    
 
 def update_torneo_id(session:Session, torneo_id:int, nombre:Optional[str],fecha_Inscripcion:Optional[date],competencia:Optional[str]):
     torneo = session.get(Torneo, torneo_id)
+    hoy = torneo.fecha_Inscripcion
+    limite = hoy + timedelta(days=7)
+
     if not torneo:
-        print("No encontrado")
-        return None
+        raise ValueError("Torneo no encontrado")
     if nombre is not None:
         torneo.nombre = nombre
     if fecha_Inscripcion is not None:
-        torneo.fecha_Inscripcion= fecha_Inscripcion
+        if (hoy > fecha_Inscripcion or fecha_Inscripcion > limite):
+            raise ValueError("No puedes correr la inscripción más de 7 días")
+        torneo.fecha_Inscripcion = fecha_Inscripcion
     if competencia is not None:
         torneo.competencia = competencia
     session.commit()
@@ -32,8 +41,7 @@ def update_torneo_id(session:Session, torneo_id:int, nombre:Optional[str],fecha_
 def delete_torneo_id(session:Session, torneo_id: int):
     torneo = session.get(Torneo, torneo_id)
     if not torneo:
-        print("No encontrado")
-        return None
+        raise ValueError("Torneo no encontrado")
     session.delete(torneo)
     session.commit()
     return torneo
