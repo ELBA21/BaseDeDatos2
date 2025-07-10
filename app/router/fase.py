@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.models import TorneoCategoria
+from ..models import TorneoCategoria
 from ..db import get_db
 from ..crud.fase import get_fase_id, create_fase, update_fase, delete_fase
 

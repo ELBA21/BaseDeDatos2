@@ -19,7 +19,7 @@ from .app.router import (
     inscripcion,
     genero,
     ciudad,
-    pais,
+    pais
 )
 
 

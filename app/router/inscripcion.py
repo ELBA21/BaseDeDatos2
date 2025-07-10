@@ -9,7 +9,7 @@ from ..crud.inscripcion import (
 from sqlalchemy.orm import Session, session
 from typing import Optional
 
-from app.crud import inscripcion
+#from app.crud import inscripcion
 
 router = APIRouter()
 
