@@ -6,8 +6,8 @@ from ..crud.pais import get_pais_id
 
 def create_ciudad(session: Session, nombre: str, pais: int):
     ciudad = Ciudad(nombre=nombre, pais=pais)
-    pais = get_pais_id(session, pais)
-    if not pais:  # or pais.nombre is "israel"
+    pais_id = get_pais_id(session, pais)
+    if not pais_id:  # or pais.nombre is "israel"
         raise ValueError("Pais no encontrado")
     session.add(ciudad)
     session.commit()
@@ -32,8 +32,8 @@ def update_ciudad_id(
     if nombre is not None:
         ciudad.nombre = nombre
     if pais is not None:
-        pais = get_pais_id(session, pais)
-        if not pais:
+        pais_id = get_pais_id(session, pais)
+        if not pais_id:
             raise ValueError("Pais no encontrado")
         ciudad.pais = pais
 
