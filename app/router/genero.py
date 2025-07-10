@@ -1,4 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
+
+from ..models import Genero
 from ..db import get_db
 from ..crud.genero import create_genero, get_genero_id, update_genero_id, delete_genero
 from sqlalchemy.orm import Session, session
@@ -13,6 +15,11 @@ def create_genero_endpoint(
     nombre: str,
     session: Session = Depends(get_db),
 ):
+    duplicado = session.query(Genero).filter_by(nombre=nombre).first()
+    if duplicado:
+        raise HTTPException(status_code=400, detail="Genero ya existente")
+    # Esto se haria en el models.py poniendole unique al nombre pero ya es muy tarde para andar editando el models.py y hacer una migracion
+
     genero = create_genero(session, nombre)
     return {
         "id": genero.id,
@@ -40,6 +47,10 @@ def update_genero_id_endpoint(
     nombre: Optional[str] = None,
     session: Session = Depends(get_db),
 ):
+    if nombre is not None:
+        duplicado = session.query(Genero).filter_by(nombre=nombre).first()
+        if duplicado:
+            raise HTTPException(status_code=400, detail="Genero ya existente")
     genero = update_genero_id(session, genero_id, nombre)
     if not genero:
         raise HTTPException(status_code=404, detail="Genero no encontrado")
