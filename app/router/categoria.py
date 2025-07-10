@@ -1,89 +1,48 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi  import APIRouter, Depends, HTTPException
 from ..db import get_db
-from ..crud.categoria import (
-    get_categoria_id,
-    create_categoria,
-    update_categoria_id,
-    delete_categoria,
-)
+from ..crud.categoria import (get_categoria_id, create_categoria, update_categoria_id, delete_categoria)
 from sqlalchemy.orm import Session
 from typing import Optional
-
 router = APIRouter()
 
 
 @router.post("/")
-def create_categoria_endpoint(
-    edad_Min: int,
-    edad_Max: int,
-    genero: int,
-    set_por_partido: int,
-    puntos_por_set: int,
-    session: Session = Depends(get_db),
-):
-    categoria = create_categoria(
-        session, edad_Min, edad_Max, genero, set_por_partido, puntos_por_set
-    )
+def create_categoria_endpoint(edad_Min:int, edad_Max:int, set_por_partido:int, puntos_por_set:int, genero:int, session: Session = Depends(get_db)):
+    categoria = create_categoria(session, edad_Min, edad_Max, set_por_partido, puntos_por_set, genero)
     return {
         "id": categoria.id,
         "edad_Min": categoria.edad_Min,
         "edad_Max": categoria.edad_Max,
-        "genero": categoria.genero,
         "set_por_partido": categoria.set_por_partido,
         "puntos_por_set": categoria.puntos_por_set,
+        "genero": categoria.genero
     }
-
 
 @router.get("/{categoria_id}")
-def get_categoria_id_endpoint(categoria_id: int, session: Session = Depends(get_db)):
+def get_categoria_id_endpoint(categoria_id:int, session: Session =Depends(get_db)):
     categoria = get_categoria_id(session, categoria_id)
-    if not categoria:
-        raise HTTPException(status_code=404, detail="Categoria no encontrada")
     return {
         "id": categoria.id,
         "edad_Min": categoria.edad_Min,
         "edad_Max": categoria.edad_Max,
-        "genero": categoria.genero,
         "set_por_partido": categoria.set_por_partido,
         "puntos_por_set": categoria.puntos_por_set,
+        "genero": categoria.genero
     }
-
 
 @router.put("/{categoria_id}")
-def update_categoria_id_endpoint(
-    categoria_id: int,
-    edad_Min: Optional[int] = None,
-    edad_Max: Optional[int] = None,
-    genero: Optional[int] = None,
-    set_por_partido: Optional[int] = None,
-    puntos_por_set: Optional[int] = None,
-    session: Session = Depends(get_db),
-):
-    categoria = update_categoria_id(
-        session,
-        categoria_id,
-        edad_Min,
-        edad_Max,
-        genero,
-        set_por_partido,
-        puntos_por_set,
-    )
-    if not categoria:
-        raise HTTPException(status_code=404, detail="Categoria no encontrada")
+def update_categoria_id_endpoint(categoria_id:int, edad_Min:Optional[int]=None, edad_Max:Optional[int]=None, set_por_partido:Optional[int]=None, puntos_por_set:Optional[int]=None, genero:Optional[int]=None, session: Session = Depends(get_db)):
+    categoria = update_categoria_id(session, categoria_id, edad_Min, edad_Max, set_por_partido, puntos_por_set, genero)
     return {
         "id": categoria.id,
         "edad_Min": categoria.edad_Min,
         "edad_Max": categoria.edad_Max,
-        "genero": categoria.genero,
         "set_por_partido": categoria.set_por_partido,
         "puntos_por_set": categoria.puntos_por_set,
+        "genero": categoria.genero
     }
 
-
 @router.delete("/{categoria_id}")
-def delete_categoria_endpoint(categoria_id: int, session: Session = Depends(get_db)):
+def delete_categoria_endpoint(categoria_id:int, session: Session = Depends(get_db)):
     categoria = delete_categoria(session, categoria_id)
-    if not categoria:
-        raise HTTPException(status_code=404, detail="Categoria no encontrada")
     return {"detail": f"Categoria con id {categoria.id} eliminada correctamente"}
-
