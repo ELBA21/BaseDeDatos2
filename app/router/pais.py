@@ -1,4 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
+
+from ..models import Pais
 from ..db import get_db
 from ..crud.pais import create_pais, get_pais_id, update_pais_id, delete_pais
 from sqlalchemy.orm import Session, session
@@ -14,6 +16,9 @@ def create_pais_endpoint(
     nombre: str,
     session: Session = Depends(get_db),
 ):
+    duplicado = session.query(Pais).filter_by(nombre=nombre).first()
+    if duplicado:
+        raise HTTPException(status_code=400, detail="Pais ya existente")
     pais = create_pais(session, nombre)
     return {
         "id": pais.id,
@@ -41,6 +46,10 @@ def update_pais_id_endpoint(
     nombre: Optional[str] = None,
     session: Session = Depends(get_db),
 ):
+    if nombre is not None:  # poque en piton no es null D:
+        duplicado = session.query(Pais).filter_by(nombre=nombre).first()
+        if duplicado:
+            raise HTTPException(status_code=400, detail="Pais ya existente")
     pais = update_pais_id(session, pais_id, nombre)
     if not pais:
         raise HTTPException(status_code=404, detail="Pais no encontrado")
