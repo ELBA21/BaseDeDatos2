@@ -2,11 +2,12 @@ from typing import Optional
 from sqlalchemy.orm import Session
 from ..models import Categoria
 
-def create_categoria(session: Session, edad_Min:int,edad_Max:int, genero:str,set_por_partido:int, puntos_por_set:int):
-    if not (0 <= edad_Min < edad_Max):
-        raise ValueError("edad_Min debe ser menor que edad_Max y ambos deben ser no negativos.")
-    if genero is None:
-        raise ValueError("genero no debe ser None.")
+def create_categoria(session: Session, edad_Min: int, edad_Max: int, genero: str, set_por_partido: int, puntos_por_set:int):
+    if not (0 < edad_Min <= edad_Max):
+        raise ValueError("edad_Min debe ser menor que edad_Max y ambos deben ser positivos.")
+    if not genero.strip():
+        raise ValueError("genero no debe ser vacío")
+    genero = genero.strip()
     if set_por_partido <= 0:
         raise ValueError("set_por_partido debe ser un número positivo.")
     if puntos_por_set <= 0:
@@ -27,23 +28,28 @@ def update_categoria_id(session: Session, categoria_id: int, edad_Min: Optional[
     if not categoria:
         raise ValueError("Categoria no encontrada")
     if edad_Min is not None:
-        if edad_Min < 0:
-            raise ValueError("edad_Min debe ser un número no negativo.")
-        if edad_Max is not None and edad_Min >= edad_Max:
-            raise ValueError("edad_Min debe ser menor que edad_Max.")
+        if edad_Min <= 0:
+            raise ValueError("edad_Min debe ser un número positivo.")
+        if (edad_Max is not None and edad_Min > edad_Max) or (categoria.edad_Max < edad_Min):
+            raise ValueError("edad_Min debe ser menor o igual que edad_Max.")
         categoria.edad_Min = edad_Min
     if edad_Max is not None:
-        if edad_Max < 0:
-            raise ValueError("edad_Max debe ser un número no negativo.")
-        if edad_Min is not None and edad_Max <= edad_Min:
-            raise ValueError("edad_Max debe ser mayor que edad_Min.")
+        if edad_Max <= 0:
+            raise ValueError("edad_Max debe ser un número positivo.")
+        if (edad_Min is not None and edad_Max < edad_Min) or (edad_Max < categoria.edad_Min):
+            raise ValueError("edad_Max debe ser mayor o igual que edad_Min.")
         categoria.edad_Max = edad_Max
     if genero is not None:
+        genero = genero.strip()   #Esto le quita lo espacios iniciales y finales ej: "  ola puerco " -> "ola puerco"
         categoria.genero = genero
     if set_por_partido is not None:
         if set_por_partido <= 0:
             raise ValueError("set_por_partido debe ser un número positivo.")
         categoria.set_por_partido = set_por_partido
+    if puntos_por_set is not None:
+        if puntos_por_set <= 0:
+            raise ValueError("puntos_por_set debe ser un número positivo.")
+        categoria.puntos_por_set = puntos_por_set
     session.commit()
     return categoria
 

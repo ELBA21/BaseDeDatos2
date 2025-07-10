@@ -3,7 +3,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 from ..models import Torneo
 
-def create_torneo(session: Session,nombre:str, fecha_Inscripcion:date, competencia:Optional[str]):
+def create_torneo(session: Session,nombre:str, fecha_Inscripcion:date, competencia:Optional[str] = None):
     hoy = date.today()
     limite = hoy + timedelta(days=30)
     if (hoy > fecha_Inscripcion or fecha_Inscripcion > limite):
@@ -20,7 +20,7 @@ def get_torneo_id(session:Session,torneo_id:int):
         raise ValueError("Torneo no encontrado")
     return torneo    
 
-def update_torneo_id(session:Session, torneo_id:int, nombre:Optional[str],fecha_Inscripcion:Optional[date],competencia:Optional[str]):
+def update_torneo_id(session:Session, torneo_id:int, nombre:Optional[str] = None,fecha_Inscripcion:Optional[date] = None,competencia:Optional[str] = None):
     torneo = session.get(Torneo, torneo_id)
     hoy = torneo.fecha_Inscripcion
     limite = hoy + timedelta(days=7)
@@ -44,4 +44,3 @@ def delete_torneo_id(session:Session, torneo_id: int):
         raise ValueError("Torneo no encontrado")
     session.delete(torneo)
     session.commit()
-    return torneo
