@@ -1,6 +1,6 @@
 from fastapi  import APIRouter, Depends, HTTPException
 from ..db import get_db
-from ..crud.torneo_categoria import create_torneo_categoria, get_torneo_categoria_id, delete_torneo_categoria_id
+from ..crud.torneo_categoria import create_torneo_categoria, get_torneo_categoria_id, update_torneo_categoria_id, delete_torneo_categoria_id
 from sqlalchemy.orm import Session
 from typing import Optional
 router = APIRouter()
@@ -16,6 +16,11 @@ def create_torneo_categoria_endpoint(torneo_id: int, categoria_id: int, session:
 @router.get("/{torneo_categoria_id}")
 def get_torneo_categoria_id_endpoint(torneo_categoria_id: int, session:Session= Depends(get_db)):
     torneo_categoria = get_torneo_categoria_id(session, torneo_categoria_id)
+    return {"id": torneo_categoria.id, "torneo_id": torneo_categoria.torneo_id, "categoria_id": torneo_categoria.categoria_id}
+
+@router.put("/{torneo_categoria_id}")
+def update_torneo_categoria_id_endpoint(torneo_categoria_id: int, torneo_id: Optional[int] = None, categoria_id: Optional[int] = None, session: Session = Depends(get_db)):
+    torneo_categoria = update_torneo_categoria_id(session, torneo_categoria_id, torneo_id, categoria_id)
     return {"id": torneo_categoria.id, "torneo_id": torneo_categoria.torneo_id, "categoria_id": torneo_categoria.categoria_id}
 
 @router.delete("/{torneo_categoria_id}")

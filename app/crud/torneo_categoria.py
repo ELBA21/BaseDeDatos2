@@ -33,6 +33,38 @@ def get_torneo_categoria_id(session:Session,torneo_categoria_id:int):
         raise HTTPException(status_code=400, detail="Relación Torneo-Categoría no encontrada")
     return torneo_categoria    
 
+def update_torneo_categoria_id(session: Session, torneo_categoria_id: int, torneo_id: Optional[int] = None, categoria_id: Optional[int] = None):
+    torneo_categoria = session.get(TorneoCategoria, torneo_categoria_id)
+    if not torneo_categoria:
+        raise HTTPException(status_code=400, detail="Relación Torneo-Categoría no encontrada")
+
+    if (torneo_id is not None and categoria_id is not None):
+        existe = session.query(TorneoCategoria).filter_by(
+            torneo_id=torneo_id, categoria_id=categoria_id    
+        ).first()
+        if existe:
+            raise HTTPException(status_code=400, detail="La relación ya existe")
+        torneo_categoria.torneo_id = torneo_id
+        torneo_categoria.categoria_id = categoria_id
+    else:
+        if torneo_id is not None:
+            existe = session.query(TorneoCategoria).filter_by(
+                torneo_id=torneo_id, categoria_id=torneo_categoria.categoria_id    
+            ).first()
+            if existe:
+                raise HTTPException(status_code=400, detail="La relación ya existe")
+            torneo_categoria.torneo_id = torneo_id
+        if categoria_id is not None:
+            existe = session.query(TorneoCategoria).filter_by(
+                torneo_id=torneo_categoria.torneo_id, categoria_id=categoria_id    
+            ).first()
+            if existe:
+                raise HTTPException(status_code=400, detail="La relación ya existe")
+            torneo_categoria.categoria_id = categoria_id
+        
+    session.commit()
+    return torneo_categoria
+
 def delete_torneo_categoria_id(session:Session, torneo_categoria_id: int):
     torneo_categoria = session.get(TorneoCategoria, torneo_categoria_id)
     if not torneo_categoria:

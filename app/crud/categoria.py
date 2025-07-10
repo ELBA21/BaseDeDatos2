@@ -5,7 +5,7 @@ from fastapi import HTTPException
 
 def create_categoria(session: Session, edad_Min: int, edad_Max: int, set_por_partido: int, puntos_por_set:int, genero: int):
     if not (0 < edad_Min <= edad_Max):
-        raise HTTPException(status_code=400, detail="edad_Min debe ser menor que edad_Max y ambos deben ser positivos.")
+        raise HTTPException(status_code=400, detail="edad_Min debe ser menor o igual que edad_Max y ambos deben ser positivos.")
     if not 0<genero<3:
         raise HTTPException(status_code=400, detail="Solo se puede masculino [1] o femenino [2] por ahora")
     if set_por_partido <= 0:
@@ -27,18 +27,28 @@ def update_categoria_id(session: Session, categoria_id: int, edad_Min: Optional[
     categoria = session.get(Categoria, categoria_id)
     if not categoria:
         raise HTTPException(status_code=400, detail="Categoria no encontrada")
-    if edad_Min is not None:
-        if edad_Min <= 0:
-            raise HTTPException(status_code=400, detail="edad_Min debe ser un número positivo.")
-        if (edad_Max is not None and edad_Min > edad_Max) or (categoria.edad_Max < edad_Min):
+    
+    if (edad_Min is not None and edad_Max is not None):
+        if (edad_Min <= 0 or edad_Max <= 0):
+            raise HTTPException(status_code=400, detail="La edad debe ser un número positivo.")
+        if (edad_Min > edad_Max):
             raise HTTPException(status_code=400, detail="edad_Min debe ser menor o igual que edad_Max.")
         categoria.edad_Min = edad_Min
-    if edad_Max is not None:
-        if edad_Max <= 0:
-            raise HTTPException(status_code=400, detail="edad_Max debe ser un número positivo.")
-        if (edad_Min is not None and edad_Max < edad_Min) or (edad_Max < categoria.edad_Min):
-            raise HTTPException(status_code=400, detail="edad_Max debe ser mayor o igual que edad_Min.")
         categoria.edad_Max = edad_Max
+    else:
+        if edad_Min is not None:
+            if (edad_Min <= 0):
+                raise HTTPException(status_code=400, detail="La edad debe ser un número positivo.")
+            if (categoria.edad_Max < edad_Min):
+                raise HTTPException(status_code=400, detail="edad_Min debe ser menor o igual que edad_Max.")
+            categoria.edad_Min = edad_Min
+        if edad_Max is not None:
+            if (edad_Max <= 0):
+                raise HTTPException(status_code=400, detail="La edad debe ser un número positivo.")
+            if (edad_Max < categoria.edad_Min):
+                raise HTTPException(status_code=400, detail="edad_Max debe ser mayor o igual que edad_Min.")
+            categoria.edad_Max = edad_Max
+
     if genero is not None:
         if not 0<genero<3:
             raise HTTPException(status_code=400, detail="Solo se puede masculino [1] o femenino [2] por ahora")
@@ -60,5 +70,4 @@ def delete_categoria(session: Session, categoria_id: int):
         raise HTTPException(status_code=400, detail="Categoria no encontrada")
     session.delete(categoria)
     session.commit()
-    return categoria
 
