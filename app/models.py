@@ -154,16 +154,16 @@ class Jugador(Base):
     id = Column(Integer, primary_key=True, index=True)
     nombre = Column(String, nullable=False)
     fecha_nacimiento = Column(Date, nullable=False)
-    genero = Column(Integer, ForeignKey("genero.id"))
+    genero = Column(Integer, ForeignKey("genero.id"), index="True")
     # pais = Column(String, nullable=False)
-    ciudad = Column(Integer, ForeignKey("ciudad.id"))
+    ciudad = Column(Integer, ForeignKey("ciudad.id"), index="True")
 
     # ForegKeys - Esta seccion se declaran las columnas de la tabla RELACIONADA a otras tablas
     # Esto crearia las columnas de las claves foraneas
     asociacion_id = Column(
-        Integer, ForeignKey("asociacion.id")
+        Integer, ForeignKey("asociacion.id", index="True")
     )  # <-- Se pueden usar comillas simples o dobles aparemente
-    categoria_id = Column(Integer, ForeignKey("categoria.id"))
+    categoria_id = Column(Integer, ForeignKey("categoria.id"), index="True")
     # Notar que la estructura es practicamente la misma, solo que se agrega el nombre de la tabla + '.id' dentro del argumento del Foreignkey
 
     # Relationships
@@ -314,7 +314,7 @@ class Mesa(Base):
     id = Column(Integer, primary_key=True)
 
     # ForeignKeys
-    Torneo_id = Column(Integer, ForeignKey("torneo.id"))
+    torneo_id = Column(Integer, ForeignKey("torneo.id"))
 
     # RelationShips
     # torneo-mesa
