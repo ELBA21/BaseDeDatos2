@@ -1,9 +1,12 @@
 from typing import Optional
 from sqlalchemy.orm import Session
 from ..models import Equipo
+from fastapi import HTTPException
 
 def create_equipo(session: Session,nombre:str,jugador_id:int,jugador2_id:int,categoria_id:int):
     equipo = Equipo(nombre=nombre, jugador_id=jugador_id, jugador2_id=jugador2_id, categoria_id=categoria_id)
+    if jugador_id ==  jugador2_id:
+        raise HTTPException(status_code = 400,detail="No se puede ingresar el mismo jugador 2 veces" )
     session.add(equipo)
     session.commit()
     return equipo
@@ -17,6 +20,8 @@ def update_equipo_id(session: Session, equipo_id: int, nombre: Optional[str] = N
     if not equipo:
         print("NO ENCONTRADO")
         return None
+    if jugador2_id == jugador_id:
+        raise HTTPException(status_code=400,detail="No se puede ingresar el mismo jugador 2 veces")
     if nombre is not None:
         equipo.nombre = nombre
     else:

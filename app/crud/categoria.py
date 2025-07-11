@@ -6,8 +6,8 @@ from fastapi import HTTPException
 def create_categoria(session: Session, edad_Min: int, edad_Max: int, set_por_partido: int, puntos_por_set:int, genero: int):
     if not (0 < edad_Min <= edad_Max):
         raise HTTPException(status_code=400, detail="edad_Min debe ser menor o igual que edad_Max y ambos deben ser positivos.")
-    if not 0<genero<3:
-        raise HTTPException(status_code=400, detail="Solo se puede masculino [1] o femenino [2] por ahora")
+    #if not 0<genero<3:
+    #    raise HTTPException(status_code=400, detail="Solo se puede masculino [1] o femenino [2] por ahora")
     if set_por_partido <= 0:
         raise HTTPException(status_code=400, detail="set_por_partido debe ser un número positivo.")
     if puntos_por_set <= 0:

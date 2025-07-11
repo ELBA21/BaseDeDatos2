@@ -41,7 +41,7 @@ def update_asociacion_id_endpoint(
     ciudad: Optional[int] = None,
     session: Session = Depends(get_db),
 ):
-    asociacion = update_asociacion_id(session, asociacion_id, nombre, ciudad, pais)
+    asociacion = update_asociacion_id(session, asociacion_id, nombre, ciudad)
     return {
         "id": asociacion_id,
         "nombre": asociacion.nombre,

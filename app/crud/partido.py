@@ -3,7 +3,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 from sqlalchemy.util import NoneType
 from ..models import Partido
-
+from fastapi import HTTPException
 
 def create_partido(
     session: Session,
@@ -66,6 +66,7 @@ def create_partido(
     # session.commit()
     # return partido
     else:
+        raise HTTPException(status_code=400, detail="No se admiten jugadores y equipos en el mismo partido")
         raise ValueError("No se admiten jugadores y equipos en el mismo partido")
     session.add(partido)
     session.commit()

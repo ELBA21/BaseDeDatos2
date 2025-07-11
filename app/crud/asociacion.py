@@ -25,7 +25,7 @@ def update_asociacion_id(
     session: Session,
     asociacion_id: int,
     nombre: Optional[str] = None,
-    ciudad: Optional[str] = None,
+    ciudad: Optional[int] = None,
 ):
     asociacion = session.get(Asociacion, asociacion_id)
     if not asociacion:

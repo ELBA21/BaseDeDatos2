@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from ..models import Mesa
 
 def create_mesa(session: Session, torneo_id:int):
-    mesa = Mesa(Torneo_id=torneo_id)
+    mesa = Mesa(torneo_id=torneo_id)
     session.add(mesa)
     session.commit()
     return mesa
@@ -23,7 +23,7 @@ def update_mesa_id(session: Session, mesa_id: int, torneo_id: Optional[int] = No
         print("Mesa no encontrada")
         return None
     if torneo_id is not None:
-        mesa.Torneo_id = torneo_id
+        mesa.torneo_id = torneo_id
     else:
         print("No se ha insertado torneo_id")
     session.commit()
